@@ -10,9 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.task6.R;
-import com.example.task6.RecyclerViewClickListener;
-import com.example.task6.data.Story;
+import com.example.task7.R;
+import com.example.task7.data.Story;
+import com.example.task7.interfaces.RecyclerViewClickListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

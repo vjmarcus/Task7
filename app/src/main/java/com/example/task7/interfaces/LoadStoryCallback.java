@@ -1,4 +1,4 @@
-package com.example.task7.viewModel.interfaces;
+package com.example.task7.interfaces;
 
 import com.example.task7.data.Story;
 

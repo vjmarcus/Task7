@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">Task7</string>
+    <string name="glide">Glide</string>
+    <string name="picasso">Picasso</string>
+    <string name="bitcoin">Bitcoin</string>
+    <string name="android">Android</string>
+    <string name="science">Science</string>
+    <string name="technology">Technology</string>
+    <string name="software">Software</string>
+    <string-array name="topics">
+        <item>software</item>
+        <item>bitcoin</item>
+        <item>android</item>
+        <item>science</item>
+        <item>technology</item>
+    </string-array>
 </resources>

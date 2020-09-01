@@ -1,4 +1,5 @@
-package com.example.task7.viewModel.interfaces;
+package com.example.task7.interfaces;
+
 
 import android.view.View;
 
