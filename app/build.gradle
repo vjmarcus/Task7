@@ -36,5 +36,22 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel:2.2.0"
     // LiveData
     implementation "androidx.lifecycle:lifecycle-livedata:2.2.0"
+    // Room
+    implementation "androidx.room:room-runtime:2.2.5"
+    annotationProcessor "androidx.room:room-compiler:2.2.5"
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    //Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    //Glide
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+    //Picasso
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    //SwipeRefreshLayout
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    //Mockito
+    implementation  'org.mockito:mockito-core:2.8.47'
 
 }
