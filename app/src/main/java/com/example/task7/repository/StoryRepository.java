@@ -67,7 +67,7 @@ public class StoryRepository {
             });
             return allNotes;
         } else {
-
+        // Load from db
             return null;
         }
     }

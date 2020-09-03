@@ -33,8 +33,6 @@ public class MainActivity extends AppCompatActivity implements  AdapterView.OnIt
     private MainActivityViewModel viewModel;
     private List<Story> storyList;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements  AdapterView.OnIt
                 if (stories != null)
                 Log.d(TAG, "onChanged: " + stories.size());
                 storyList = stories;
+                //Update recyclerView
                 showStories();
             }
         });
