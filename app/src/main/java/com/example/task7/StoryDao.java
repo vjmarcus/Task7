@@ -20,4 +20,7 @@ public interface StoryDao {
 
     @Query("SELECT * FROM story_table")
     List<Story> getAllStoriesList();
+
+    @Query("DELETE FROM story_table")
+    void deleteAllStories();
 }

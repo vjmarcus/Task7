@@ -79,7 +79,6 @@ public class MainActivity extends AppCompatActivity implements  AdapterView.OnIt
         swipeRefreshLayout.setRefreshing(true);
         Log.d(TAG, "getDataFromViewModel: current topic = " + currentTopic);
         viewModel.setCurrentKey(currentTopic);
-
         viewModel.getAllStoryData().observe(this, new Observer<List<Story>>() {
             @Override
             public void onChanged(List<Story> stories) {

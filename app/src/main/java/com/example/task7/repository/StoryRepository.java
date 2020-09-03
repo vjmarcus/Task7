@@ -43,6 +43,7 @@ public class StoryRepository {
 
     //Load data to LiveData from Web
     public LiveData<List<Story>> getLiveDataFromWeb(String key) {
+        deleteAllStoriesInDb();
         Call<StoryList> call = newsApi.getPostsByDate(key, ApiFactory.getCurrentDate(),
                 ApiFactory.getCurrentDate(), 20, "en", ApiFactory.API_KEY);
         call.enqueue(new Callback<StoryList>() {
@@ -82,6 +83,10 @@ public class StoryRepository {
         }
     }
 
+    private void deleteAllStoriesInDb() {
+        new DeleteAllStoriesAsyncTask(storyDao).execute();
+    }
+
     private void insert(Story story) {
         new InsertStoryAsyncTask(storyDao).execute(story);
     }
@@ -100,4 +105,18 @@ public class StoryRepository {
         }
     }
 
+    private class DeleteAllStoriesAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        private StoryDao storyDao;
+
+        public DeleteAllStoriesAsyncTask(StoryDao storyDao) {
+            this.storyDao = storyDao;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            storyDao.deleteAllStories();
+            return null;
+        }
+    }
 }
