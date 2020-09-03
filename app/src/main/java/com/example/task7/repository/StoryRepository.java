@@ -27,50 +27,53 @@ public class StoryRepository {
     private ApiFactory apiFactory;
     private StoryDao storyDao;
     private NewsApi newsApi;
-    private MutableLiveData<List<Story>> allNotes = new MutableLiveData<>();
+    private MutableLiveData<List<Story>> allStories = new MutableLiveData<>();
+    private LiveData<List<Story>> allStoriesLiveData;
     private Application application;
-    private Boolean fromCache = false;
+
 
     public StoryRepository(Application application) {
         this.application = application;
         StoryDatabase db = StoryDatabase.getInstance(application);
         storyDao = db.storyDao();
-
         apiFactory = ApiFactory.getInstance();
         newsApi = ApiFactory.getNewsApi();
+        allStoriesLiveData = storyDao.getAllStories();
     }
 
     //Load data to LiveData from Web
-    public MutableLiveData<List<Story>> getMutableLiveData(String key) {
-        if (!fromCache) {
-            Call<StoryList> call = newsApi.getPostsByDate(key, ApiFactory.getCurrentDate(),
-                    ApiFactory.getCurrentDate(), 20, "en", ApiFactory.API_KEY);
-            call.enqueue(new Callback<StoryList>() {
-                @Override
-                public void onResponse(@NonNull Call<StoryList> call, @NonNull Response<StoryList> response) {
-                    Log.d(TAG, "onResponse: " + response);
-                    StoryList articlesList = response.body();
-                    if (articlesList != null) {
-                        storyList = articlesList.getArticles();
-                        Log.d(TAG, "Good onResponse: " + storyList.size());
-                    } else {
-                        Log.d(TAG, "bad onResponse:");
-                    }
-                    allNotes.setValue(storyList);
-                    addStoriesToDatabase();
+    public LiveData<List<Story>> getLiveDataFromWeb(String key) {
+        Call<StoryList> call = newsApi.getPostsByDate(key, ApiFactory.getCurrentDate(),
+                ApiFactory.getCurrentDate(), 20, "en", ApiFactory.API_KEY);
+        call.enqueue(new Callback<StoryList>() {
+            @Override
+            public void onResponse(@NonNull Call<StoryList> call, @NonNull Response<StoryList> response) {
+                Log.d(TAG, "onResponse: " + response);
+                StoryList articlesList = response.body();
+                if (articlesList != null) {
+                    storyList = articlesList.getArticles();
+                    Log.d(TAG, "Good onResponse: " + storyList.size());
+                } else {
+                    Log.d(TAG, "bad onResponse:");
                 }
+                allStories.postValue(storyList);
+                addStoriesToDatabase();
+            }
 
-                @Override
-                public void onFailure(Call<StoryList> call, Throwable t) {
-                    Log.d(TAG, "onFailure: error= " + t.getMessage());
-                }
-            });
-            return allNotes;
-        } else {
-        // Load from db
-            return null;
-        }
+            @Override
+            public void onFailure(Call<StoryList> call, Throwable t) {
+                Log.d(TAG, "onFailure: error= " + t.getMessage());
+            }
+        });
+        return allStories;
     }
+
+    public LiveData<List<Story>> getLiveDataFromDb() {
+        return allStoriesLiveData;
+    }
+//    private void loadStoriesFromDatabaseInList() {
+//        new LoadStoryFromDbToLiveDataAsyncTask(storyDao, loadFromDbCallback).execute();
+//    }
 
     private void addStoriesToDatabase() {
         Log.d(TAG, "addStoriesToDatabase: ");
@@ -81,10 +84,6 @@ public class StoryRepository {
 
     private void insert(Story story) {
         new InsertStoryAsyncTask(storyDao).execute(story);
-    }
-
-    private void addAllStories() {
-
     }
 
     private class InsertStoryAsyncTask extends AsyncTask<Story, Void, Void> {
@@ -100,4 +99,5 @@ public class StoryRepository {
             return null;
         }
     }
+
 }

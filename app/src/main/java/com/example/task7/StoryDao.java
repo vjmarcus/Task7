@@ -17,4 +17,7 @@ public interface StoryDao {
 
     @Query("SELECT * FROM story_table")
     LiveData<List<Story>> getAllStories();
+
+    @Query("SELECT * FROM story_table")
+    List<Story> getAllStoriesList();
 }
