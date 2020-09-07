@@ -1,4 +1,4 @@
-package com.example.task7;
+package com.example.task7.db;
 
 import android.content.Context;
 

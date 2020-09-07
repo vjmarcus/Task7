@@ -8,8 +8,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.task7.StoryDao;
-import com.example.task7.StoryDatabase;
+import com.example.task7.db.StoryDao;
+import com.example.task7.db.StoryDatabase;
 import com.example.task7.api.ApiFactory;
 import com.example.task7.api.NewsApi;
 import com.example.task7.data.Story;
@@ -72,9 +72,6 @@ public class StoryRepository {
     public LiveData<List<Story>> getLiveDataFromDb() {
         return allStoriesLiveData;
     }
-//    private void loadStoriesFromDatabaseInList() {
-//        new LoadStoryFromDbToLiveDataAsyncTask(storyDao, loadFromDbCallback).execute();
-//    }
 
     private void addStoriesToDatabase() {
         Log.d(TAG, "addStoriesToDatabase: ");

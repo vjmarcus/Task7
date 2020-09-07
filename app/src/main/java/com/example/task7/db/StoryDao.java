@@ -1,4 +1,4 @@
-package com.example.task7;
+package com.example.task7.db;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
