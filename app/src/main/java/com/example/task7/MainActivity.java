@@ -57,8 +57,10 @@ public class MainActivity extends AppCompatActivity implements  AdapterView.OnIt
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//        mainPresenter.loadStories(adapterView.getSelectedItem().toString());
         Log.d(TAG, "Main onItemSelected: " + adapterView.getSelectedItem().toString());
+        if (currentTopic != adapterView.getSelectedItem().toString()) {
+            viewModel.clearDb();
+        }
         currentTopic = adapterView.getSelectedItem().toString();
         getDataFromViewModel();
     }
@@ -79,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements  AdapterView.OnIt
         swipeRefreshLayout.setRefreshing(true);
         Log.d(TAG, "getDataFromViewModel: current topic = " + currentTopic);
         viewModel.setCurrentKey(currentTopic);
-        viewModel.getAllStoryData().observe(this, new Observer<List<Story>>() {
+        viewModel.getAllStoryData(currentTopic).observe(this, new Observer<List<Story>>() {
             @Override
             public void onChanged(List<Story> stories) {
                 if (stories != null)

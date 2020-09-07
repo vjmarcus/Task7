@@ -80,7 +80,7 @@ public class StoryRepository {
         }
     }
 
-    private void deleteAllStoriesInDb() {
+    public void deleteAllStoriesInDb() {
         new DeleteAllStoriesAsyncTask(storyDao).execute();
     }
 

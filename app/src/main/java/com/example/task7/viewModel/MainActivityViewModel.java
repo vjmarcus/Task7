@@ -18,6 +18,7 @@ public class MainActivityViewModel extends AndroidViewModel {
     private StoryRepository storyRepository;
     private String key;
     private long updatedTime;
+    private String updatedTopic;
 
 
     public MainActivityViewModel(@NonNull Application application) {
@@ -27,10 +28,12 @@ public class MainActivityViewModel extends AndroidViewModel {
         Log.d(TAG, "MainActivityViewModel: updatedTime is " + updatedTime);
     }
 
-    public LiveData<List<Story>> getAllStoryData() {
-        if (loadFromDbOrLoadFromWEb()) {
+    public LiveData<List<Story>> getAllStoryData(String currentTopic) {
+        if (loadFromDbOrLoadFromWEb(currentTopic) ) {
+            Log.d(TAG, "viewModel getAllStoryData: load from db");
             return storyRepository.getLiveDataFromDb();
         } else {
+            Log.d(TAG, "viewModel getAllStoryData: load from WEB");
             return storyRepository.getLiveDataFromWeb(key);
         }
     }
@@ -39,17 +42,18 @@ public class MainActivityViewModel extends AndroidViewModel {
         this.key = currentKey;
     }
 
-    private Boolean loadFromDbOrLoadFromWEb() {
+    public void clearDb() {
+        storyRepository.deleteAllStoriesInDb();
+    }
+
+    private Boolean loadFromDbOrLoadFromWEb(String currentTopic) {
         long currentTime = System.currentTimeMillis();
-        Log.d(TAG, "getAllStoryData: current time is " + currentTime);
-        Log.d(TAG, "difference is " + (currentTime - updatedTime));
-        if ((currentTime - updatedTime) < 60000){
-            Log.d(TAG, "getAllStoryData return from db");
+        if (((currentTime - updatedTime) < 60000) && currentTopic.equals(updatedTopic)){
             updatedTime = System.currentTimeMillis();
             return true;
         } else {
-            Log.d(TAG, "getAllStoryData return from web");
             updatedTime = System.currentTimeMillis();
+            updatedTopic = currentTopic;
             return false;
         }
     }
