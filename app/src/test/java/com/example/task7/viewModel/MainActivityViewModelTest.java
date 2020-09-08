@@ -21,6 +21,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,12 +31,11 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(JUnit4.class)
+@RunWith(MockitoJUnitRunner.class)
 public class MainActivityViewModelTest {
     @Rule
     public InstantTaskExecutorRule instantExecutorRule = new InstantTaskExecutorRule();
 
-    MutableLiveData<List<Story>> fakeListLiveData;
 
     @Mock
     private Application mockApplication;
@@ -47,6 +48,7 @@ public class MainActivityViewModelTest {
 
     private final String TOPIC = "topic";
 
+    private MutableLiveData<List<Story>> fakeListLiveData;
     private MainActivityViewModel viewModel;
     private Lifecycle lifecycle;
 
@@ -57,9 +59,10 @@ public class MainActivityViewModelTest {
         viewModel = new MainActivityViewModel(mockApplication);
         getFakeLiveData();
         // настраиваем репозиторий
-        when(mockStoryRepository.getLiveDataFromWeb(TOPIC)).thenReturn(fakeListLiveData);
-        when(mockStoryRepository.getLiveDataFromDb()).thenReturn(fakeListLiveData);
-//        viewModel.getAllStoryData(TOPIC).observeForever(mockObserver);
+        when(mockStoryRepository.getLiveDataFromWeb(TOPIC)).thenAnswer((Answer<?>) fakeListLiveData);
+
+        when(viewModel.getAllStoryData(TOPIC)).thenReturn(fakeListLiveData);
+        viewModel.getAllStoryData(TOPIC).observeForever(mockObserver);
     }
 
     @Test

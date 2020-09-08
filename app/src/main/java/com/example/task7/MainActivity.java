@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity implements  AdapterView.OnIt
     private MainActivityViewModel viewModel;
     private List<Story> storyList;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,15 +44,6 @@ public class MainActivity extends AppCompatActivity implements  AdapterView.OnIt
                 .AndroidViewModelFactory(getApplication())
                 .create(MainActivityViewModel.class);
         viewModel.initRepository(getApplication());
-    }
-
-    private void init() {
-        Spinner spinner = findViewById(R.id.spinner);
-        ArrayAdapter<?> arrayAdapter = ArrayAdapter.createFromResource(this, R.array.topics,
-                android.R.layout.simple_list_item_1);
-        spinner.setAdapter(arrayAdapter);
-        spinner.setOnItemSelectedListener(this);
-        recyclerView = findViewById(R.id.story_recycler);
     }
 
     @Override
@@ -78,6 +68,15 @@ public class MainActivity extends AppCompatActivity implements  AdapterView.OnIt
         swipeRefreshLayout.setRefreshing(false);
     }
 
+    private void init() {
+        Spinner spinner = findViewById(R.id.spinner);
+        ArrayAdapter<?> arrayAdapter = ArrayAdapter.createFromResource(this, R.array.topics,
+                android.R.layout.simple_list_item_1);
+        spinner.setAdapter(arrayAdapter);
+        spinner.setOnItemSelectedListener(this);
+        recyclerView = findViewById(R.id.story_recycler);
+    }
+
     private void getDataFromViewModel(){
         swipeRefreshLayout.setRefreshing(true);
         Log.d(TAG, "getDataFromViewModel: current topic = " + currentTopic);
@@ -88,6 +87,21 @@ public class MainActivity extends AppCompatActivity implements  AdapterView.OnIt
             public void onChanged(List<Story> stories) {
                 if (stories != null)
                 Log.d(TAG, "onChanged: " + stories.size());
+                storyList = stories;
+                //Update recyclerView
+                showStories();
+            }
+        });
+    }
+
+    private void subscribe() {
+        viewModel.setCurrentRequestParam(currentTopic);
+        // Вынести в онКреа
+        viewModel.getAllStoryData(currentTopic).observe(this, new Observer<List<Story>>() {
+            @Override
+            public void onChanged(List<Story> stories) {
+                if (stories != null)
+                    Log.d(TAG, "onChanged: " + stories.size());
                 storyList = stories;
                 //Update recyclerView
                 showStories();
