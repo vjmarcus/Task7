@@ -80,12 +80,26 @@ public class MainActivity extends AppCompatActivity implements  AdapterView.OnIt
     private void getDataFromViewModel(){
         swipeRefreshLayout.setRefreshing(true);
         Log.d(TAG, "getDataFromViewModel: current topic = " + currentTopic);
-        viewModel.setCurrentKey(currentTopic);
+        viewModel.setCurrentRequestParam(currentTopic);
+        // Вынести в онКреа
         viewModel.getAllStoryData(currentTopic).observe(this, new Observer<List<Story>>() {
             @Override
             public void onChanged(List<Story> stories) {
                 if (stories != null)
                 Log.d(TAG, "onChanged: " + stories.size());
+                storyList = stories;
+                //Update recyclerView
+                showStories();
+            }
+        });
+    }
+
+    private void viewModelSubscribe() {
+        viewModel.getAllStoryData(currentTopic).observe(this, new Observer<List<Story>>() {
+            @Override
+            public void onChanged(List<Story> stories) {
+                if (stories != null)
+                    Log.d(TAG, "onChanged: " + stories.size());
                 storyList = stories;
                 //Update recyclerView
                 showStories();

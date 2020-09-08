@@ -55,7 +55,6 @@ public class MainActivityViewModelTest {
         MockitoAnnotations.initMocks(this);
         lifecycle = new LifecycleRegistry(lifecycleOwner);
         viewModel = new MainActivityViewModel(application);
-        storyRepository = new StoryRepository(application);
         viewModel.getAllStoryData(null).observeForever(observer);
         when(storyRepository.getLiveDataFromDb()).thenReturn(getFakeLiveData());
 
@@ -63,7 +62,7 @@ public class MainActivityViewModelTest {
 
     @Test
     public void testNull() {
-//        assertNotNull(viewModel.getAllStoryData(null));
+        assertNotNull(viewModel.getAllStoryData(null));
 //        assertTrue(viewModel.getAllStoryData().hasObservers());
     }
 

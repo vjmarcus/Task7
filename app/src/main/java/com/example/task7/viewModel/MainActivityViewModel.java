@@ -20,7 +20,7 @@ public class MainActivityViewModel extends AndroidViewModel {
     private long updatedTime;
     private String updatedTopic;
 
-
+    // на контекст попробовать поменять
     public MainActivityViewModel(@NonNull Application application) {
         super(application);
         storyRepository = new StoryRepository(application);
@@ -38,7 +38,7 @@ public class MainActivityViewModel extends AndroidViewModel {
         }
     }
 
-    public void setCurrentKey(String currentKey) {
+    public void setCurrentRequestParam(String currentKey) {
         this.key = currentKey;
     }
 
@@ -47,6 +47,7 @@ public class MainActivityViewModel extends AndroidViewModel {
     }
 
     private Boolean loadFromDbOrLoadFromWEb(String currentTopic) {
+        // timeUnit
         long currentTime = System.currentTimeMillis();
         if (((currentTime - updatedTime) < 60000) && currentTopic.equals(updatedTopic)){
             updatedTime = System.currentTimeMillis();
