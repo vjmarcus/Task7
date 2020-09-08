@@ -20,12 +20,15 @@ public class MainActivityViewModel extends AndroidViewModel {
     private long updatedTime;
     private String updatedTopic;
 
-    // на контекст попробовать поменять
+    // не поменять, требует аппликейшен
     public MainActivityViewModel(@NonNull Application application) {
         super(application);
+        Log.d(TAG, "MainActivityViewModel: updatedTime is " + updatedTime);
+    }
+
+    public void initRepository(Application application) {
         storyRepository = new StoryRepository(application);
         updatedTime = 0;
-        Log.d(TAG, "MainActivityViewModel: updatedTime is " + updatedTime);
     }
 
     public LiveData<List<Story>> getAllStoryData(String currentTopic) {

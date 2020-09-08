@@ -12,7 +12,6 @@ import androidx.lifecycle.Observer;
 
 import com.example.task7.data.Source;
 import com.example.task7.data.Story;
-import com.example.task7.db.StoryDatabase;
 import com.example.task7.repository.StoryRepository;
 
 import org.junit.Before;
@@ -27,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(JUnit4.class)
@@ -34,18 +34,18 @@ public class MainActivityViewModelTest {
     @Rule
     public InstantTaskExecutorRule instantExecutorRule = new InstantTaskExecutorRule();
 
-    MutableLiveData<List<Story>> listLiveData;
+    MutableLiveData<List<Story>> fakeListLiveData;
 
     @Mock
-    private Application application;
+    private Application mockApplication;
     @Mock
-    private StoryRepository storyRepository;
+    private StoryRepository mockStoryRepository;
     @Mock
-    private Observer<List<Story>> observer;
+    private Observer<List<Story>> mockObserver;
     @Mock
-    LifecycleOwner lifecycleOwner;
-    @Mock
-    StoryDatabase storyDatabase;
+    LifecycleOwner mockLifecycleOwner;
+
+    private final String TOPIC = "topic";
 
     private MainActivityViewModel viewModel;
     private Lifecycle lifecycle;
@@ -53,39 +53,46 @@ public class MainActivityViewModelTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        lifecycle = new LifecycleRegistry(lifecycleOwner);
-        viewModel = new MainActivityViewModel(application);
-        viewModel.getAllStoryData(null).observeForever(observer);
-        when(storyRepository.getLiveDataFromDb()).thenReturn(getFakeLiveData());
-
+        lifecycle = new LifecycleRegistry(mockLifecycleOwner);
+        viewModel = new MainActivityViewModel(mockApplication);
+        getFakeLiveData();
+        // настраиваем репозиторий
+        when(mockStoryRepository.getLiveDataFromWeb(TOPIC)).thenReturn(fakeListLiveData);
+        when(mockStoryRepository.getLiveDataFromDb()).thenReturn(fakeListLiveData);
+//        viewModel.getAllStoryData(TOPIC).observeForever(mockObserver);
     }
 
     @Test
     public void testNull() {
-        assertNotNull(viewModel.getAllStoryData(null));
+        // Проверяем на нулл
+        assertNull(viewModel.getAllStoryData(TOPIC));
+
+//        when(viewModel.getAllStoryData(TOPIC)).thenReturn(getFakeLiveData());
+//        viewModel.getAllStoryData(TOPIC);
+//        assertNotNull(viewModel.getAllStoryData(TOPIC));
 //        assertTrue(viewModel.getAllStoryData().hasObservers());
     }
 
     public LiveData<List<Story>> getFakeLiveData() {
         final List<Story> storyList = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 2; i++) {
             storyList.add(new Story(new Source("source_name"), "author",
                     "title", "desc", "url", "pub"));
         }
         new Thread(new Runnable() {
             @Override
             public void run() {
-                listLiveData.setValue(storyList);
+                fakeListLiveData.setValue(storyList);
             }
         });
-        return listLiveData;
+        return fakeListLiveData;
     }
 
     public LiveData<List<Story>> getCurrentLiveData() {
-        if (listLiveData == null) {
-            listLiveData = new MutableLiveData<>();
+        if (fakeListLiveData == null) {
+            fakeListLiveData = new MutableLiveData<>();
         }
-        return listLiveData;
+        return fakeListLiveData;
     }
 
 }

@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements  AdapterView.OnIt
         viewModel = new ViewModelProvider
                 .AndroidViewModelFactory(getApplication())
                 .create(MainActivityViewModel.class);
+        viewModel.initRepository(getApplication());
     }
 
     private void init() {
