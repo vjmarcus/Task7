@@ -18,6 +18,7 @@ import android.widget.Spinner;
 import com.example.task7.adapter.StoryAdapter;
 import com.example.task7.data.Story;
 import com.example.task7.interfaces.RecyclerViewClickListener;
+import com.example.task7.repository.StoryRepository;
 import com.example.task7.viewModel.MainActivityViewModel;
 
 import java.util.List;
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements  AdapterView.OnIt
     private RecyclerView recyclerView;
     private String currentTopic;
     private MainActivityViewModel viewModel;
+    private StoryRepository storyRepository;
     private List<Story> storyList;
 
     @Override
@@ -41,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements  AdapterView.OnIt
         initRecyclerViewClickListener();
         initSwipeRefreshLayout();
         currentTopic = "software";
+
         viewModel = new ViewModelProvider
                 .AndroidViewModelFactory(getApplication())
                 .create(MainActivityViewModel.class);

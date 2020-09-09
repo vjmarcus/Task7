@@ -36,7 +36,6 @@ public class MainActivityViewModelTest {
     @Rule
     public InstantTaskExecutorRule instantExecutorRule = new InstantTaskExecutorRule();
 
-
     @Mock
     private Application mockApplication;
     @Mock
@@ -46,34 +45,26 @@ public class MainActivityViewModelTest {
     @Mock
     LifecycleOwner mockLifecycleOwner;
 
-    private final String TOPIC = "topic";
-
     private MutableLiveData<List<Story>> fakeListLiveData;
     private MainActivityViewModel viewModel;
     private Lifecycle lifecycle;
+    private LiveData<List<Story>> liveDataViewModel;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         lifecycle = new LifecycleRegistry(mockLifecycleOwner);
         viewModel = new MainActivityViewModel(mockApplication);
-        getFakeLiveData();
-        // настраиваем репозиторий
-        when(mockStoryRepository.getLiveDataFromWeb(TOPIC)).thenAnswer((Answer<?>) fakeListLiveData);
-
-        when(viewModel.getAllStoryData(TOPIC)).thenReturn(fakeListLiveData);
-        viewModel.getAllStoryData(TOPIC).observeForever(mockObserver);
     }
 
     @Test
     public void testNull() {
-        // Проверяем на нулл
-        assertNull(viewModel.getAllStoryData(TOPIC));
 
-//        when(viewModel.getAllStoryData(TOPIC)).thenReturn(getFakeLiveData());
-//        viewModel.getAllStoryData(TOPIC);
-//        assertNotNull(viewModel.getAllStoryData(TOPIC));
-//        assertTrue(viewModel.getAllStoryData().hasObservers());
+    }
+
+    @Test
+    public void update() {
+
     }
 
     public LiveData<List<Story>> getFakeLiveData() {
@@ -97,5 +88,4 @@ public class MainActivityViewModelTest {
         }
         return fakeListLiveData;
     }
-
 }

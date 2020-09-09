@@ -26,7 +26,6 @@ public class MainActivityViewModel extends AndroidViewModel {
     // не поменять, требует аппликейшен потому что extends AndroidViewModel
     public MainActivityViewModel(@NonNull Application application) {
         super(application);
-        storyRepository = new StoryRepository(application);
         Log.d(TAG, "MainActivityViewModel: updatedTime is " + updatedTime);
     }
 
