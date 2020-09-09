@@ -29,7 +29,6 @@ public class StoryRepository {
     private NewsApi newsApi;
     private MutableLiveData<List<Story>> allStories = new MutableLiveData<>();
     private LiveData<List<Story>> allStoriesLiveData;
-    //заменить на контекст
     private Application application;
 
     public StoryRepository(Application application) {
@@ -43,7 +42,6 @@ public class StoryRepository {
 
     //Load data to LiveData from Web
     public LiveData<List<Story>> getLiveDataFromWeb(String key) {
-        // заменить
         deleteAllStoriesInDb();
         Call<StoryList> call = newsApi.getPostsByDate(key, ApiFactory.getCurrentDate(),
                 ApiFactory.getCurrentDate(), 20, "en", ApiFactory.API_KEY);

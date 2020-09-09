@@ -40,10 +40,26 @@ public class MainActivity extends AppCompatActivity implements  AdapterView.OnIt
         init();
         initRecyclerViewClickListener();
         initSwipeRefreshLayout();
+        currentTopic = "software";
         viewModel = new ViewModelProvider
                 .AndroidViewModelFactory(getApplication())
                 .create(MainActivityViewModel.class);
-        viewModel.initRepository(getApplication());
+        subscribeViewModel();
+    }
+
+    private void subscribeViewModel() {
+        viewModel.setCurrentRequestParam(currentTopic);
+        viewModel.update(currentTopic);
+        viewModel.getLiveDataViewModel().observe(this, new Observer<List<Story>>() {
+            @Override
+            public void onChanged(List<Story> stories) {
+                if (stories != null)
+                    Log.d(TAG, "onChanged: " + stories.size());
+                storyList = stories;
+                //Update recyclerView
+                showStories();
+            }
+        });
     }
 
     @Override
@@ -53,7 +69,8 @@ public class MainActivity extends AppCompatActivity implements  AdapterView.OnIt
             viewModel.clearDb();
         }
         currentTopic = adapterView.getSelectedItem().toString();
-        getDataFromViewModel();
+        viewModel.setCurrentRequestParam(currentTopic);
+        viewModel.update(currentTopic);
     }
 
     @Override
@@ -77,49 +94,12 @@ public class MainActivity extends AppCompatActivity implements  AdapterView.OnIt
         recyclerView = findViewById(R.id.story_recycler);
     }
 
-    private void getDataFromViewModel(){
+    private void UpdateDataFromViewModel(){
         swipeRefreshLayout.setRefreshing(true);
         Log.d(TAG, "getDataFromViewModel: current topic = " + currentTopic);
         viewModel.setCurrentRequestParam(currentTopic);
-        // Вынести в онКреа
-        viewModel.getAllStoryData(currentTopic).observe(this, new Observer<List<Story>>() {
-            @Override
-            public void onChanged(List<Story> stories) {
-                if (stories != null)
-                Log.d(TAG, "onChanged: " + stories.size());
-                storyList = stories;
-                //Update recyclerView
-                showStories();
-            }
-        });
-    }
-
-    private void subscribe() {
-        viewModel.setCurrentRequestParam(currentTopic);
-        // Вынести в онКреа
-        viewModel.getAllStoryData(currentTopic).observe(this, new Observer<List<Story>>() {
-            @Override
-            public void onChanged(List<Story> stories) {
-                if (stories != null)
-                    Log.d(TAG, "onChanged: " + stories.size());
-                storyList = stories;
-                //Update recyclerView
-                showStories();
-            }
-        });
-    }
-
-    private void viewModelSubscribe() {
-        viewModel.getAllStoryData(currentTopic).observe(this, new Observer<List<Story>>() {
-            @Override
-            public void onChanged(List<Story> stories) {
-                if (stories != null)
-                    Log.d(TAG, "onChanged: " + stories.size());
-                storyList = stories;
-                //Update recyclerView
-                showStories();
-            }
-        });
+        viewModel.update(currentTopic);
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     private void initRecyclerViewClickListener() {
@@ -137,8 +117,9 @@ public class MainActivity extends AppCompatActivity implements  AdapterView.OnIt
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getDataFromViewModel();
+                viewModel.update(currentTopic);
                 Log.d(TAG, "onRefresh: swipe");
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
     }
