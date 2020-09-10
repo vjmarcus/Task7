@@ -6,7 +6,9 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
+import com.example.task7.MainActivity;
 import com.example.task7.data.Story;
 import com.example.task7.repository.StoryRepository;
 
@@ -19,6 +21,7 @@ public class MainActivityViewModel extends AndroidViewModel {
     private String key;
     private long updatedTime;
     private String updatedTopic;
+    public LiveData<List<Story>> liveDataViewModel;
 
     // не поменять, требует аппликейшен потому что extends AndroidViewModel
     public MainActivityViewModel(@NonNull Application application) {
@@ -26,18 +29,17 @@ public class MainActivityViewModel extends AndroidViewModel {
         Log.d(TAG, "MainActivityViewModel: updatedTime is " + updatedTime);
     }
 
-    public void initRepository(Application application) {
-        storyRepository = new StoryRepository(application);
-        updatedTime = 0;
+    public LiveData<List<Story>> getLiveDataViewModel() {
+        return liveDataViewModel;
     }
 
-    public LiveData<List<Story>> getAllStoryData(String currentTopic) {
+    public void update(String currentTopic) {
         if (loadFromDbOrLoadFromWEb(currentTopic) ) {
             Log.d(TAG, "viewModel getAllStoryData: load from db");
-            return storyRepository.getLiveDataFromDb();
+            liveDataViewModel  = storyRepository.getLiveDataFromDb();
         } else {
             Log.d(TAG, "viewModel getAllStoryData: load from WEB");
-            return storyRepository.getLiveDataFromWeb(key);
+            liveDataViewModel  = storyRepository.getLiveDataFromWeb(key);
         }
     }
 
@@ -50,7 +52,6 @@ public class MainActivityViewModel extends AndroidViewModel {
     }
 
     private Boolean loadFromDbOrLoadFromWEb(String currentTopic) {
-        // timeUnit
         long currentTime = System.currentTimeMillis();
         if (((currentTime - updatedTime) < 60000) && currentTopic.equals(updatedTopic)){
             updatedTime = System.currentTimeMillis();
