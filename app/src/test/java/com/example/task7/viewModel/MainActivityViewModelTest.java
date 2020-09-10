@@ -35,18 +35,13 @@ import static org.mockito.Mockito.when;
 public class MainActivityViewModelTest {
     @Rule
     public InstantTaskExecutorRule instantExecutorRule = new InstantTaskExecutorRule();
-
-
     @Mock
     private Application mockApplication;
-    @Mock
-    private StoryRepository mockStoryRepository;
     @Mock
     private Observer<List<Story>> mockObserver;
     @Mock
     LifecycleOwner mockLifecycleOwner;
 
-    private final String TOPIC = "topic";
 
     private MutableLiveData<List<Story>> fakeListLiveData = new MutableLiveData<>();
     private MainActivityViewModel viewModel;

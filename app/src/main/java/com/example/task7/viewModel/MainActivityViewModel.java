@@ -29,6 +29,10 @@ public class MainActivityViewModel extends AndroidViewModel {
         Log.d(TAG, "MainActivityViewModel: updatedTime is " + updatedTime);
     }
 
+    public void initRepository() {
+        storyRepository = new StoryRepository(getApplication());
+    }
+
     public LiveData<List<Story>> getLiveDataViewModel() {
         return liveDataViewModel;
     }

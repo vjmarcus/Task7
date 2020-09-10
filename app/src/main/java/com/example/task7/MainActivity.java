@@ -43,10 +43,10 @@ public class MainActivity extends AppCompatActivity implements  AdapterView.OnIt
         initRecyclerViewClickListener();
         initSwipeRefreshLayout();
         currentTopic = "software";
-
         viewModel = new ViewModelProvider
                 .AndroidViewModelFactory(getApplication())
                 .create(MainActivityViewModel.class);
+        viewModel.initRepository();
         subscribeViewModel();
     }
 
