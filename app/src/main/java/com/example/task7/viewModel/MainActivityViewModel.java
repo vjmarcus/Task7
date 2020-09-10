@@ -20,7 +20,7 @@ public class MainActivityViewModel extends AndroidViewModel {
     private long updatedTime;
     private String updatedTopic;
 
-    // не поменять, требует аппликейшен
+    // не поменять, требует аппликейшен потому что extends AndroidViewModel
     public MainActivityViewModel(@NonNull Application application) {
         super(application);
         Log.d(TAG, "MainActivityViewModel: updatedTime is " + updatedTime);

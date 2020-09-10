@@ -48,7 +48,7 @@ public class MainActivityViewModelTest {
 
     private final String TOPIC = "topic";
 
-    private MutableLiveData<List<Story>> fakeListLiveData;
+    private MutableLiveData<List<Story>> fakeListLiveData = new MutableLiveData<>();
     private MainActivityViewModel viewModel;
     private Lifecycle lifecycle;
 
@@ -57,28 +57,19 @@ public class MainActivityViewModelTest {
         MockitoAnnotations.initMocks(this);
         lifecycle = new LifecycleRegistry(mockLifecycleOwner);
         viewModel = new MainActivityViewModel(mockApplication);
-        getFakeLiveData();
-        // настраиваем репозиторий
-        when(mockStoryRepository.getLiveDataFromWeb(TOPIC)).thenAnswer((Answer<?>) fakeListLiveData);
-
-        when(viewModel.getAllStoryData(TOPIC)).thenReturn(fakeListLiveData);
-        viewModel.getAllStoryData(TOPIC).observeForever(mockObserver);
+        fakeListLiveData.observeForever(mockObserver);
     }
 
     @Test
-    public void testNull() {
-        // Проверяем на нулл
-        assertNull(viewModel.getAllStoryData(TOPIC));
-
-//        when(viewModel.getAllStoryData(TOPIC)).thenReturn(getFakeLiveData());
-//        viewModel.getAllStoryData(TOPIC);
-//        assertNotNull(viewModel.getAllStoryData(TOPIC));
-//        assertTrue(viewModel.getAllStoryData().hasObservers());
+    public void testLiveData() {
+   assertNotNull((fakeListLiveData));
+   fakeListLiveData = (MutableLiveData<List<Story>>) getFakeLiveData();
+   assertEquals(getFakeLiveData().getValue(), fakeListLiveData.getValue());
     }
 
     public LiveData<List<Story>> getFakeLiveData() {
         final List<Story> storyList = new ArrayList<>();
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             storyList.add(new Story(new Source("source_name"), "author",
                     "title", "desc", "url", "pub"));
         }
