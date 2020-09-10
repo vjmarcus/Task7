@@ -24,23 +24,19 @@ import retrofit2.Response;
 public class StoryRepository {
     private static final String TAG = "MyApp";
     private List<Story> storyList;
-    private ApiFactory apiFactory;
     private StoryDao storyDao;
     private NewsApi newsApi;
     private MutableLiveData<List<Story>> allStories = new MutableLiveData<>();
     private LiveData<List<Story>> allStoriesLiveData;
-    private Application application;
 
     public StoryRepository(Application application) {
-        this.application = application;
         StoryDatabase db = StoryDatabase.getInstance(application);
         storyDao = db.storyDao();
-        apiFactory = ApiFactory.getInstance();
+        ApiFactory apiFactory = ApiFactory.getInstance();
         newsApi = ApiFactory.getNewsApi();
         allStoriesLiveData = storyDao.getAllStories();
     }
 
-    //Load data to LiveData from Web
     public LiveData<List<Story>> getLiveDataFromWeb(String key) {
         deleteAllStoriesInDb();
         Call<StoryList> call = newsApi.getPostsByDate(key, ApiFactory.getCurrentDate(),

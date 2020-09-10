@@ -23,7 +23,6 @@ public class MainActivityViewModel extends AndroidViewModel {
     private String updatedTopic;
     public LiveData<List<Story>> liveDataViewModel;
 
-    // не поменять, требует аппликейшен потому что extends AndroidViewModel
     public MainActivityViewModel(@NonNull Application application) {
         super(application);
         Log.d(TAG, "MainActivityViewModel: updatedTime is " + updatedTime);

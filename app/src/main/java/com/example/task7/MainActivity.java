@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity implements  AdapterView.OnIt
     private RecyclerView recyclerView;
     private String currentTopic;
     private MainActivityViewModel viewModel;
-    private StoryRepository storyRepository;
     private List<Story> storyList;
 
     @Override
@@ -95,14 +94,6 @@ public class MainActivity extends AppCompatActivity implements  AdapterView.OnIt
         spinner.setAdapter(arrayAdapter);
         spinner.setOnItemSelectedListener(this);
         recyclerView = findViewById(R.id.story_recycler);
-    }
-
-    private void UpdateDataFromViewModel(){
-        swipeRefreshLayout.setRefreshing(true);
-        Log.d(TAG, "getDataFromViewModel: current topic = " + currentTopic);
-        viewModel.setCurrentRequestParam(currentTopic);
-        viewModel.update(currentTopic);
-        swipeRefreshLayout.setRefreshing(false);
     }
 
     private void initRecyclerViewClickListener() {
